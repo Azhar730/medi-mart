@@ -1,4 +1,4 @@
-# Medi Mart Client
+# Medi Mart
 
 Medi Mart is a modern web application built with NextJS, TypeScript, and Vite. It provides a seamless user experience for managing orders, uploading files, and more.
 
@@ -50,9 +50,9 @@ Ensure you have the following installed:
 
 
 ### Medi Mart Backend
-
+```bash
 This is the backend server for the Medi Mart application, built with Node.js, Express, and MongoDB. It provides APIs for managing medicines, users, orders, and authentication.
-
+```
 ## Features
 
 - **Authentication**: User registration, login, password change, and role-based access control.
@@ -61,7 +61,7 @@ This is the backend server for the Medi Mart application, built with Node.js, Ex
 - **Error Handling**: Centralized error handling with support for Mongoose, and custom errors.
 - **Payment Integration**: Integrated with ShurjoPay for payment processing.
 - **Admin Features**: Manage users, roles, and statuses.
-
+```bash
 ## Tech Stack
 
 - **Backend**: Node.js, Express.js
@@ -74,9 +74,9 @@ This is the backend server for the Medi Mart application, built with Node.js, Ex
 - **TypeScript**: Strongly typed codebase
 
 
-
+```
 ## Environment Variables
-
+```bash
 Create a `.env` file in the root directory and configure the following variables:
 
 ```env
@@ -86,7 +86,7 @@ DATABASE_URL=<your_mongodb_connection_string>
 BCRYPT_SALT_ROUNDS=8
 JWT_ACCESS_SECRET=<your_jwt_secret>
 JWT_ACCESS_EXPIRES_IN=1d
-
+```
 # Cloudinary
 CLOUDINARY_CLOUD_NAME=<your_cloudinary_cloud_name>
 CLOUDINARY_API_KEY=<your_cloudinary_api_key>
@@ -99,7 +99,7 @@ SP_PASSWORD=<your_shurjopay_password>
 SP_PREFIX=SP
 SP_RETURN_URL=<your_return_url>
 ```
-
+```
 ## Installation
 
 1. Clone the repository:
