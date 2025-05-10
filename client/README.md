@@ -21,13 +21,6 @@ Medi Mart is a modern web application built with NextJS, TypeScript, and Vite. I
 
 ## Getting Started
 
-### Prerequisites
-
-Ensure you have the following installed:
-
-- [Node.js](https://nodejs.org/) (v16 or higher)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-
 ### Installation
 
 1. Clone the repository:
@@ -37,6 +30,7 @@ Ensure you have the following installed:
    cd medi-mart-client
    npm install
    npm run dev
+
 
 2. Live Link
   ```bash
