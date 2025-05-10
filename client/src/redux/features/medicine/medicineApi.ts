@@ -48,6 +48,13 @@ const bicycleApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["medicines"],
     }),
+    getAvailableMedicineCount: builder.query({
+      query: () => ({
+        url: "/medicines/available-medicines",
+        method: "GET",
+      }),
+      providesTags: ["medicines"],
+    }),
   }),
 });
 export const {
@@ -56,4 +63,5 @@ export const {
   useGetSingleMedicineQuery,
   useDeleteMedicineMutation,
   useUpdateMedicineMutation,
+  useGetAvailableMedicineCountQuery
 } = bicycleApi;

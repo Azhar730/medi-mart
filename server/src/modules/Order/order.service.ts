@@ -111,6 +111,24 @@ const getRevenueFromDB = async () => {
   ]);
   return result;
 };
+const getTotalSalesFromDB = async () => {
+  const result = await Order.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalSales: { $sum: '$totalPrice' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        totalSales: 1,
+      },
+    },
+  ]);
+
+  return result[0]?.totalSales || 0;
+};
 const getMyOrdersFromDB = async (id: string) => {
   const customer = await User.findById(id);
   if (!customer) {
@@ -139,6 +157,87 @@ const updateShippingStatusIntoDB = async (payload: {
   }
   return result;
 };
+const getLatest10OrdersFromDB = async () => {
+  const orders = await Order.find()
+    .sort({ createdAt: -1 })
+    .limit(10)
+    .populate('user')
+    .populate('medicines.medicine');
+
+  return orders;
+};
+const getTopSellingMedicinesFromDB = async () => {
+  const result = await Order.aggregate([
+    // Unwind medicines array to access individual medicine and quantity
+    { $unwind: '$medicines' },
+
+    // Group by medicine ID, sum the sold quantity
+    {
+      $group: {
+        _id: '$medicines.medicine',
+        sold: { $sum: '$medicines.quantity' },
+      },
+    },
+
+    // Lookup medicine details (like name, price) from Medicine collection
+    {
+      $lookup: {
+        from: 'medicines', // ⚠️ collection name should match in lowercase plural if default
+        localField: '_id',
+        foreignField: '_id',
+        as: 'medicineDetails',
+      },
+    },
+    { $unwind: '$medicineDetails' },
+
+    // Calculate revenue = sold * price
+    {
+      $project: {
+        name: '$medicineDetails.name',
+        sold: 1,
+        revenue: {
+          $multiply: ['$sold', '$medicineDetails.price'],
+        },
+      },
+    },
+    { $limit: 6 },
+    { $sort: { sold: -1 } },
+  ]);
+
+  return result;
+};
+const getMedicineStockStatsFromDB = async () => {
+  const soldResult = await Order.aggregate([
+    {
+      $match: {
+        status: { $in: ['Paid', 'Shipped', 'Completed'] },
+      },
+    },
+    { $unwind: '$medicines' },
+    {
+      $group: {
+        _id: null,
+        totalSold: { $sum: '$medicines.quantity' },
+      },
+    },
+  ]);
+
+  const totalSold = soldResult[0]?.totalSold || 0;
+
+  // Get total available quantity from medicines
+  const medicines = await Medicine.find({ isDeleted: false }, 'quantity');
+  const totalAvailable = medicines.reduce(
+    (sum, med) => sum + (med.quantity || 0),
+    0,
+  );
+
+  // Calculate percentages
+  const total = totalSold + totalAvailable;
+  const soldPercentage = total ? (totalSold / total) * 100 : 0;
+  const availablePercentage = total ? (totalAvailable / total) * 100 : 0;
+  const result = { soldPercentage, availablePercentage };
+  return result;
+};
 export const OrderServices = {
   createOrderIntoDB,
   verifyPayment,
@@ -146,4 +245,8 @@ export const OrderServices = {
   getMyOrdersFromDB,
   getAllOrdersFromDB,
   updateShippingStatusIntoDB,
+  getTotalSalesFromDB,
+  getLatest10OrdersFromDB,
+  getTopSellingMedicinesFromDB,
+  getMedicineStockStatsFromDB
 };

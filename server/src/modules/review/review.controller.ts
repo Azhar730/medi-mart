@@ -21,8 +21,17 @@ const getAllReview = catchAsync(async (req, res) => {
       data: result,
     });
   });
-
+  const getAverageCustomerRating = catchAsync(async (req, res) => {
+    const result = await ReviewService.getAverageCustomerRatingFromDB();
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Available medicines count successfully',
+      data: result,
+    });
+  });
 export const ReviewController = {
   createReview,
   getAllReview,
+  getAverageCustomerRating
 };

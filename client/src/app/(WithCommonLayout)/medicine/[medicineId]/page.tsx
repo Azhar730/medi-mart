@@ -1,5 +1,4 @@
 import MedicineDetails from "@/components/modules/medicine/MedicineDetails";
-import PrivateRoute from "@/Routes/PrivateRoute";
 
 const MedicineDetailsPage = async ({
   params,
@@ -8,11 +7,9 @@ const MedicineDetailsPage = async ({
 }) => {
   const { medicineId } = await params;
   return (
-    <PrivateRoute>
-      <div>
-        <MedicineDetails medicineId={medicineId} />
-      </div>
-    </PrivateRoute>
+    <div>
+      <MedicineDetails medicineId={medicineId} />
+    </div>
   );
 };
 

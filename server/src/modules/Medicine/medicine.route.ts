@@ -4,6 +4,7 @@ import { upload } from '../../app/utils/imageUpload';
 import auth from '../../middlewares/auth';
 
 const router = Router();
+router.get('/available-medicines', MedicineControllers.getAvailableMedicinesCount);
 router.post(
   '/create-medicine',
   auth('admin'),
@@ -27,4 +28,5 @@ router.put(
 );
 router.delete('/:medicineId', auth('admin'), MedicineControllers.deleteMedicine);
 router.get('/', MedicineControllers.getAllMedicine);
+
 export const MedicineRoutes = router;

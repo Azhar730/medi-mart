@@ -56,10 +56,20 @@ const deleteMedicine = catchAsync(async (req, res) => {
     data: {},
   });
 });
+const getAvailableMedicinesCount = catchAsync(async (req, res) => {
+  const result = await MedicineServices.getAvailableMedicinesCountFromDB();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Available medicines count successfully',
+    data: result,
+  });
+});
 export const MedicineControllers = {
   createMedicine,
   getAllMedicine,
   getSingleMedicine,
   updateMedicine,
   deleteMedicine,
+  getAvailableMedicinesCount
 };

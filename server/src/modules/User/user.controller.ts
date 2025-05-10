@@ -13,6 +13,15 @@ const getAllUser = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
+const getTotalUserCount = catchAsync(async (req, res) => {
+  const result = await userServices.getTotalUserCountFromDB();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Users count successfully',
+    data: result,
+  });
+});
 const getSingleUser = catchAsync(async (req, res) => {
   const { userId } = req.params;
   const result = await userServices.getSingleUserFromDB(userId);
@@ -49,4 +58,5 @@ export const userControllers = {
   getSingleUser,
   updateUser,
   deleteUser,
+  getTotalUserCount
 };

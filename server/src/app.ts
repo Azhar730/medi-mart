@@ -9,8 +9,7 @@ import { AuthRoute } from './modules/Auth/auth.route';
 import reviewRoutes from './modules/review/review.route';
 const app: Application = express();
 app.use(express.json());
-app.use(cors({ origin: 'https://medimart-nu.vercel.app', credentials: true }));
-
+app.use(cors({ origin: ['https://medimart-nu.vercel.app','http://localhost:3000'], credentials: true }));
 app.use('/api/auth', AuthRoute);
 app.use('/api/medicines', MedicineRoutes);
 app.use('/api/orders', OrderRoutes);

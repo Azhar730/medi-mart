@@ -17,6 +17,13 @@ const reviewApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["reviews"],
     }),
+    getRatingCount: builder.query({
+      query: () => ({
+        url: "/reviews/average-rating",
+        method: "GET",
+      }),
+      providesTags: ["reviews"],
+    }),
   }),
 });
-export const { useCreateReviewMutation, useGetAllReviewQuery } = reviewApi;
+export const { useCreateReviewMutation, useGetAllReviewQuery,useGetRatingCountQuery } = reviewApi;

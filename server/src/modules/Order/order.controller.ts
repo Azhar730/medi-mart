@@ -30,6 +30,15 @@ const getRevenue = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getTotalSales = catchAsync(async (req, res) => {
+  const result = await OrderServices.getTotalSalesFromDB();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Total sales retrieved successfully',
+    data: result,
+  });
+});
 const getMyOrders = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await OrderServices.getMyOrdersFromDB(id);
@@ -49,12 +58,39 @@ const getAllOrders = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getLatest10Orders = catchAsync(async (req, res) => {
+  const result = await OrderServices.getLatest10OrdersFromDB();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Latest Orders are retrieved successfully',
+    data: result,
+  });
+});
+const getTopSellingMedicines = catchAsync(async (req, res) => {
+  const result = await OrderServices.getTopSellingMedicinesFromDB();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Top Selling Medicines are retrieved successfully',
+    data: result,
+  });
+});
 const updateShippingStatus = catchAsync(async (req, res) => {
   const result = await OrderServices.updateShippingStatusIntoDB(req.body);
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'Order status updated successfully',
+    data: result,
+  });
+});
+const getMedicineStockStats = catchAsync(async (req, res) => {
+  const result = await OrderServices.getMedicineStockStatsFromDB();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Stock stats retrieved successfully',
     data: result,
   });
 });
@@ -65,4 +101,8 @@ export const OrderControllers = {
   getMyOrders,
   getAllOrders,
   updateShippingStatus,
+  getTotalSales,
+  getLatest10Orders,
+  getTopSellingMedicines,
+  getMedicineStockStats
 };

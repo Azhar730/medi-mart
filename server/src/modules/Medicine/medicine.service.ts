@@ -12,10 +12,7 @@ const createMedicineIntoDB = async (file: any, payload: TMedicine) => {
   return result;
 };
 const getAllMedicineFromDB = async (query: Record<string, unknown>) => {
-  const searchableFields = [
-    'name',
-    'category',
-  ];
+  const searchableFields = ['name', 'category'];
   const medicinesQuery = new QueryBuilder(
     Medicine.find({ isDeleted: false }),
     query,
@@ -26,7 +23,7 @@ const getAllMedicineFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
   const result = await medicinesQuery.modelQuery;
-  const meta =await medicinesQuery.countTotal()
+  const meta = await medicinesQuery.countTotal();
   return { meta, result };
 };
 const getSingleMedicineFromDB = async (id: string) => {
@@ -63,10 +60,32 @@ const deleteMedicineFromDB = async (id: string) => {
   );
   return result;
 };
+const getAvailableMedicinesCountFromDB = async () => {
+  const result = await Medicine.aggregate([
+    {
+      $match: {
+        isDeleted: false,
+        inStock: true,
+        quantity: { $gt: 0 },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalQuantity: { $sum: '$quantity' },
+      },
+    },
+    {
+      $project: { _id:0,totalQuantity: 1 },
+    },
+  ]);
+  return result[0]?.totalQuantity || 0;
+};
 export const MedicineServices = {
   createMedicineIntoDB,
   getAllMedicineFromDB,
   getSingleMedicineFromDB,
   updateMedicineIntoDB,
   deleteMedicineFromDB,
+  getAvailableMedicinesCountFromDB,
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import {
   Menu,
   X,
@@ -11,24 +11,26 @@ import {
   Users,
   LogOut,
   BriefcaseMedical,
+  Pill,
+  User2,
 } from "lucide-react";
-import { toast } from "sonner";
 import { IoAdd } from "react-icons/io5";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import Swal from "sweetalert2";
-import { protectedRoutes } from "@/contants";
+import { toast } from "sonner";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout, selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const role = user?.role || "customer";
 
@@ -45,27 +47,33 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       if (result.isConfirmed) {
         await dispatch(logout());
         localStorage.removeItem("accessToken");
-        if (protectedRoutes.some((route) => pathname.match(route))) {
-          router.push("/login");
-        } else {
-          router.push("/login");
-          toast.success("Logged out successfully");
-        }
-        Swal.fire({
-          title: "Successful!",
-          text: "Your have been logged out.",
-          icon: "success",
-        });
+        router.push("/login");
+        toast.success("Logged out successfully");
+        Swal.fire("Successful!", "You have been logged out.", "success");
       }
     });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        dropdownRef.current && !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const menuItems =
-    role == "customer"
+    role === "customer"
       ? [
           { icon: Home, text: "Dashboard", path: "/dashboard" },
           { icon: BarChart3, text: "My Orders", path: "/dashboard/my-orders" },
-          { icon: Settings, text: "Profile", path: "/dashboard/my-profile" },
+          { icon: User, text: "Profile", path: "/dashboard/my-profile" },
+          { icon: Settings, text: "Settings", path: "/dashboard/settings" },
         ]
       : [
           { icon: Home, text: "Dashboard", path: "/dashboard" },
@@ -74,6 +82,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             text: "Order Management",
             path: "/dashboard/order-management",
           },
+          { icon: BarChart3, text: "My Orders", path: "/dashboard/my-orders" },
           {
             icon: Users,
             text: "User Management",
@@ -110,14 +119,12 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         }`}
       >
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-          <Link href="/" className="flex items-center gap-x-2">
-            <h1 className="text-xl font-semibold text-blue-400">Medi Mart</h1>
-            <Image
-              alt="Tablet"
-              height={20}
-              width={20}
-              src="https://i.postimg.cc/N0FHZVyD/pngimg-com-pills-PNG16521.png"
-            />
+          <Link
+            href="/"
+            className="flex items-center gap-x-2 text-xl font-semibold text-blue-400"
+          >
+            <Pill />
+            <h1>Medi Mart</h1>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -151,7 +158,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           })}
         </nav>
 
-        {/* log out button  */}
+        {/* Logout Button */}
         <div className="p-4 fixed bottom-2 w-full">
           <button
             onClick={handleLogout}
@@ -174,10 +181,57 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             >
               <Menu className="w-5 h-5 text-gray-500" />
             </button>
+
+            {/* Right Section */}
+            <div className="ml-auto flex items-center gap-4 relative" ref={dropdownRef}>
+             
+              {/* Profile Dropdown */}
+              <button
+                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded-full transition"
+              >
+                <User2/>
+              </button>
+              <AnimatePresence>
+                {isProfileMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute right-0 top-14 w-60 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+                  >
+                    <div className="p-4 border-b">
+                      <p className="text-sm font-semibold">{user?.name || "User Name"}</p>
+                      <p className="text-xs text-gray-500">{user?.email || "user@email.com"}</p>
+                    </div>
+                    <div className="py-2">
+                      <Link
+                        href="/dashboard/my-profile"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/dashboard/settings"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Settings
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </header>
 
-        {/* Main Content Area */}
+        {/* Page Content */}
         <main className="py-4 px-6 lg:px-8 mt-16">{children}</main>
       </div>
 

@@ -55,7 +55,30 @@ const getAllReviewFromDB = async () => {
     .populate('user medicine');
   return result;
 };
+const getAverageCustomerRatingFromDB = async () => {
+  const result = await Review.aggregate([
+    {
+      $match: { isDeleted: false },
+    },
+    {
+      $group: {
+        _id: null,
+        averageRating: { $avg: '$rating' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        averageRating: 1,
+      },
+    },
+  ]);
+
+  return result[0]?.averageRating || 0; // fallback if no data
+};
+
 export const ReviewService = {
   createReview,
   getAllReviewFromDB,
+  getAverageCustomerRatingFromDB
 };

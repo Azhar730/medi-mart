@@ -28,7 +28,7 @@ const Footer = () => {
         y: inView ? 0 : 20, // Slide up when in view
       }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="bg-gray-800 text-white"
+      className="bg-blue-900 text-white"
     >
       <div className="w-[90%] md:w-[88%] mx-auto py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

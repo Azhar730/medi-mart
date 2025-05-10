@@ -31,6 +31,13 @@ const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["users"],
     }),
+    getUsersCount: builder.query({
+      query: () => ({
+        url: "/users/user-count",
+        method: "GET",
+      }),
+      providesTags: ["users"],
+    }),
   }),
 });
 export const {
@@ -38,4 +45,5 @@ export const {
   useGetSingleUserQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
+  useGetUsersCountQuery
 } = userApi;

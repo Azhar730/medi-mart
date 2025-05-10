@@ -42,7 +42,7 @@ const MyOrders = () => {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800">
-            My Ordered Bicycles
+            My Ordered Medicines
           </h2>
         </div>
         <div className="overflow-x-auto">

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import SectionHead from "@/components/shared/SectionHead";
 import Loading from "@/components/utils/Loading";
 import { useGetAllMedicineQuery } from "@/redux/features/medicine/medicineApi";
@@ -6,6 +6,7 @@ import { IMedicine } from "@/types/medicine";
 import MedicineCard from "../medicine/MedicineCard";
 import Link from "next/link";
 import Button from "@/components/utils/Button";
+import { motion } from "framer-motion";
 
 const FeaturedMedicines = () => {
   const queryParams = [{ name: "limit", value: 8 }];
@@ -14,37 +15,43 @@ const FeaturedMedicines = () => {
     isLoading,
     isError,
   } = useGetAllMedicineQuery(queryParams);
-  console.log(response);
-  if (isLoading) {
-    return <Loading />;
-  }
-  if (isError) {
+
+  if (isLoading) return <Loading />;
+  if (isError)
     return (
       <h3 className="text-main font-bold text-2xl flex items-center justify-center h-screen">
-        Something went wrong !
+        Something went wrong!
       </h3>
     );
-  }
+
   const medicines = response?.data;
+
   return (
-    <section className="my-8 md:my-16 bg-gray-100">
+    <section className="my-12 md:my-20 py-10">
       <div className="w-[90%] md:w-[88%] mx-auto">
         <SectionHead
-          heading="Featured Medicine"
-          description="Check out your medicine and order it now"
+          heading="Featured Medicines"
+          description="Top quality medicines available now — Grab yours before it’s gone!"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ staggerChildren: 0.1 }}
+        >
           {medicines.map((medicine: IMedicine, index: number) => (
             <MedicineCard key={index} medicine={medicine} />
           ))}
-        </div>
-        <div className="text-center mt-5 flex justify-end">
+        </motion.div>
+        <div className="text-center mt-8 flex justify-center">
           <Link href="/all-medicines">
-            <Button text="View All Medicine" />
+            <Button text="View All Medicines" />
           </Link>
         </div>
       </div>
     </section>
   );
 };
+
 export default FeaturedMedicines;

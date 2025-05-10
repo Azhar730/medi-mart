@@ -8,13 +8,12 @@ import { FiUser } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { BiLogOut } from "react-icons/bi";
 import { toast } from "sonner";
-import { LogOut, ShoppingCart, User } from "lucide-react";
+import { LogOut, Pill, ShoppingCart, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import menuItems from "@/data/menuItems";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { protectedRoutes } from "@/contants";
-import Image from "next/image";
 import Swal from "sweetalert2";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
@@ -97,21 +96,16 @@ const Navbar = () => {
       className={cn(
         "flex justify-between items-center py-4 md:py-8 mx-auto z-[100] bg-transparent fixed top-0 w-full md:h-[100px] text-white",
         {
-          "bg-gray-800 shadow-md":
+          "bg-blue-900 shadow-md":
             isScrolled || (pathName !== "/" && pathName !== "/about"),
         }
       )}
     >
       <div className="w-[90%] md:w-[88%] mx-auto flex justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-x-2">
-          <h1 className="text-xl font-semibold text-blue-400">Medi Mart</h1>
-          <Image
-            alt="Tablet"
-            height={20}
-            width={20}
-            src="https://i.postimg.cc/N0FHZVyD/pngimg-com-pills-PNG16521.png"
-          />
+        <Link href="/" className="flex items-center gap-x-2 text-xl font-semibold text-blue-400">
+          <Pill/>
+          <h1>Medi Mart</h1>
         </Link>
 
         {/* Desktop Menu */}
@@ -130,14 +124,7 @@ const Navbar = () => {
               </Link>
             );
           })}
-          <Link href="cart" className="relative">
-            <ShoppingCart className="cursor-pointer text-2xl" />
-            <span className="absolute -top-2 -right-5 bg-red-500 text-white text-xs px-1.5 rounded-full">
-              {medicines.length}
-            </span>
-          </Link>
         </div>
-
         {/* Desktop User/Login */}
         <div className="hidden lg:flex items-center gap-8">
           {!isLoggedIn ? (
@@ -188,6 +175,12 @@ const Navbar = () => {
               )}
             </div>
           )}
+          <Link href="cart" className="relative">
+            <ShoppingCart className="cursor-pointer text-2xl" />
+            <span className="absolute -top-2 -right-5 bg-red-500 text-white text-xs px-1.5 rounded-full">
+              {medicines.length}
+            </span>
+          </Link>
         </div>
 
         {/* Mobile Menu Icon */}
@@ -216,9 +209,17 @@ const Navbar = () => {
           style={{ width: "70%" }}
         >
           <div className="flex flex-col items-start gap-6 px-6 py-5">
-            <Link href="/" className="font-semibold text-white text-xl">
-              Medi Mart
-            </Link>
+            <div className="flex items-center justify-between w-full">
+              <Link href="/" className="font-semibold text-white text-xl">
+                Medi Mart
+              </Link>
+              <Link href="cart" className="relative">
+                <ShoppingCart className="cursor-pointer text-2xl" />
+                <span className="absolute -top-2 -right-5 bg-red-500 text-white text-xs px-1.5 rounded-full">
+                  {medicines.length}
+                </span>
+              </Link>
+            </div>
             <div className="mt-2 md:mt-8 flex flex-col gap-4">
               {menuItems.map((menu, idx) => {
                 const isActive = pathName === menu.path;
