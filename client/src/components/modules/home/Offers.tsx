@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const Offers = () => {
   return (
-    <section className="min-h-screen max-w-6xl mx-auto py-20 px-4 md:px-10">
+    <section className="min-h-screen py-20 px-4 md:px-10">
       <SectionHead
         heading="Best Medicine Deals of the Month"
         description="Grab these limited-time health offers before they expire. Exclusive savings for our MediMart customers."

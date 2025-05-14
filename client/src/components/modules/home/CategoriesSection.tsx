@@ -23,9 +23,8 @@ const CategoriesSection = () => {
   };
 
   return (
-    <div className="my-16 px-4 max-w-6xl mx-auto">
+    <div className="my-4 px-4">
       <SectionHead heading="Browse by Categories" />
-
       <motion.div
         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-6"
         initial="hidden"

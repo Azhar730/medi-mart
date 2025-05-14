@@ -36,7 +36,7 @@ const ReviewSection = () => {
   }
 
   return (
-    <div className="my-16 px-4">
+    <div className="my-12">
       <SectionHead heading="Customer Reviews" />
 
       <motion.div

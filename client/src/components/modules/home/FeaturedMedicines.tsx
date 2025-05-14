@@ -28,27 +28,25 @@ const FeaturedMedicines = () => {
 
   return (
     <section className="my-12 md:my-20 py-10">
-      <div className="w-[90%] md:w-[88%] mx-auto">
-        <SectionHead
-          heading="Featured Medicines"
-          description="Top quality medicines available now — Grab yours before it’s gone!"
-        />
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ staggerChildren: 0.1 }}
-        >
-          {medicines.map((medicine: IMedicine, index: number) => (
-            <MedicineCard key={index} medicine={medicine} />
-          ))}
-        </motion.div>
-        <div className="text-center mt-8 flex justify-center">
-          <Link href="/all-medicines">
-            <Button text="View All Medicines" />
-          </Link>
-        </div>
+      <SectionHead
+        heading="Featured Medicines"
+        description="Top quality medicines available now — Grab yours before it’s gone!"
+      />
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ staggerChildren: 0.1 }}
+      >
+        {medicines.map((medicine: IMedicine, index: number) => (
+          <MedicineCard key={index} medicine={medicine} />
+        ))}
+      </motion.div>
+      <div className="text-center mt-8 flex justify-center">
+        <Link href="/all-medicines">
+          <Button text="View All Medicines" />
+        </Link>
       </div>
     </section>
   );
