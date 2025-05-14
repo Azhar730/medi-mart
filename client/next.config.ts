@@ -1,5 +1,14 @@
 import type { NextConfig } from "next";
 
+
+// module.exports = {
+//   webpack: (config: { cache: boolean; }) => {
+//     config.cache = false;
+//     return config;
+//   },
+// };
+
+
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
